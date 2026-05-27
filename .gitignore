@@ -2,7 +2,17 @@
 **__pycache__**
 **.DS_Store**
 data/*/*.txt
+!data/SCARED/scared_train.txt
+!data/SCARED/scared_val.txt
+!data/SCARED/scared_test.txt
 cfgs/*/*stereocarla.yaml
 
 cfgs/foundationstereo/fstereo_*.yaml
+!cfgs/foundationstereo/fstereo_scared.yaml
 cfgs/foundationstereo/fstereo_combine.yaml
+
+output/
+pretrained/
+*.pt
+*.pth
+*.ckpt

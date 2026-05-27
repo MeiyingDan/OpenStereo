@@ -156,8 +156,17 @@ class DPT_DINOv2(nn.Module):
         #     self.pretrained = torch.hub.load('torchhub/facebookresearch_dinov2_main', 'dinov2_{:}14'.format(encoder), source='local', pretrained=False)
         # else:
         # self.pretrained = torch.hub.load('facebookresearch/dinov2', 'dinov2_{:}14'.format(encoder), pretrained=pretrained_dino, skip_validation=True)
-        self.pretrained = torch.hub.load('/file_system/vepfs/algorithm/chenming.zhang/.cache/torch/hub/facebookresearch_dinov2_main', 'dinov2_{:}14'.format(encoder),
-                                         source='local', pretrained=False)
+        # self.pretrained = torch.hub.load('/file_system/vepfs/algorithm/chenming.zhang/.cache/torch/hub/facebookresearch_dinov2_main', 'dinov2_{:}14'.format(encoder),
+        #                                  source='local', pretrained=False)
+        # self.pretrained = torch.hub.load('/home/meiying/.cache/torch/hub/facebookresearch_dinov2_main', 'dinov2_{:}14'.format(encoder),
+        #                                  source='local', pretrained=False)
+        from dinov2.hub.backbones import dinov2_vits14, dinov2_vitb14, dinov2_vitl14
+        encoder_factory = {
+            'vits': dinov2_vits14,
+            'vitb': dinov2_vitb14,
+            'vitl': dinov2_vitl14,
+        }
+        self.pretrained = encoder_factory[encoder](pretrained=pretrained_dino)
 
         dim = self.pretrained.blocks[0].attn.qkv.in_features
 
@@ -179,7 +188,10 @@ class DepthAnything(DPT_DINOv2):
         
         encoder = config['encoder']
         # load depthanythingv2 pretrained weights, which can be downloaded from https://github.com/DepthAnything/Depth-Anything-V2
-        self.load_state_dict(torch.load(f'/your_path/depth_anything_v2_{encoder}.pth', map_location='cpu'))
+        # self.load_state_dict(torch.load(f'/your_path/depth_anything_v2_{encoder}.pth', map_location='cpu'))
+        depth_anything_ckpt = f'/home/meiying/Meiying_Masterarbeit/OpenStereo/pretrained/depth_anything_v2_{encoder}.pth'
+        if os.path.isfile(depth_anything_ckpt):
+            self.load_state_dict(torch.load(depth_anything_ckpt, map_location='cpu'))
 
     def forward(self, x):
         h, w = x.shape[-2:]

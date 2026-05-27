@@ -1,0 +1,75 @@
+DATA_CONFIG:
+    DATA_INFOS:
+        -   DATASET: ScaredDataset
+            DATA_SPLIT: {
+                TRAINING: ./data/SCARED/scared_train.txt,
+                EVALUATING: ./data/SCARED/scared_val.txt,
+                TESTING: ./data/SCARED/scared_test.txt
+            }
+            RETURN_RIGHT_DISP: false
+            SCALE_FACTOR: 128.0
+
+    DATA_TRANSFORM:
+        TRAINING:
+            - { NAME: StereoColorJitter, BRIGHTNESS: [ 0.7, 1.3 ], CONTRAST: [ 0.8, 1.2 ], SATURATION: [ 0.8, 1.2 ], HUE: 0.1, ASYMMETRIC_PROB: 0 }
+            # Removed RandomErase: erasing patches on the right image creates unmatchable regions in cost volume, causing sporadic NaN    
+            - { NAME: RandomCrop, SIZE: [ 320, 736 ], Y_JITTER: false }
+            - { NAME: TransposeImage }
+            - { NAME: ToTensor }
+            - { NAME: NormalizeImage, MEAN: [ 0.485, 0.456, 0.406 ], STD: [ 0.229, 0.224, 0.225 ] }
+        EVALUATING:
+            - { NAME: DivisiblePad, BY: 32 }
+            - { NAME: TransposeImage }
+            - { NAME: ToTensor }
+            - { NAME: NormalizeImage, MEAN: [ 0.485, 0.456, 0.406 ], STD: [ 0.229, 0.224, 0.225 ] }
+
+MODEL:
+    NAME: PSMNet
+    MAX_DISP: &max_disp 256 
+    FIND_UNUSED_PARAMETERS: false
+    CKPT: -1
+    PRETRAINED_MODEL: '/home/meiying/Meiying_Masterarbeit/OpenStereo/pretrained/PSMNet_Sceneflow.pt'
+
+OPTIMIZATION:
+    BATCH_SIZE_PER_GPU: 1
+    FREEZE_BN: false
+    SYNC_BN: false
+    AMP: false
+    NUM_EPOCHS: 50
+
+    OPTIMIZER:
+        NAME: AdamW
+        LR: 0.0001
+        WEIGHT_DECAY: 0.00001
+        EPS: 0.00000001
+
+    SCHEDULER:
+        NAME: MultiStepLR
+        GAMMA: 0.5
+        MILESTONES: [ 20, 35, 45 ]
+        ON_EPOCH: True
+        WARMUP:
+            WARM_STEPS: 1000
+
+    CLIP_GRAD:
+        TYPE: norm
+        MAX_NORM: 1.0
+        NORM_TYPE: 2
+
+EVALUATOR:
+    BATCH_SIZE_PER_GPU: 1
+    MAX_DISP: *max_disp
+    METRIC:
+        - d1_all
+        - epe
+        - thres_1
+        - thres_2
+        - thres_3
+
+TRAINER:
+    EVAL_INTERVAL: 1
+    CKPT_SAVE_INTERVAL: 1
+    MAX_CKPT_SAVE_NUM: 30
+    LOGGER_ITER_INTERVAL: 10
+    TRAIN_VISUALIZATION: True
+    EVAL_VISUALIZATION: True

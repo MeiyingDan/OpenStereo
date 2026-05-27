@@ -35,9 +35,21 @@ class PSMNet(nn.Module):
 
         weights = [0.5, 0.7, 1.0]
 
+        if mask.sum() == 0:
+            loss = torch.tensor(0.0, device=disp_gt.device, requires_grad=True)
+            return loss, {'scalar/train/loss_disp': 0.0}
+
         loss = 0.0
         for model_pred, weight in zip(model_preds['train_preds'], weights):
-            loss += weight * F.smooth_l1_loss(model_pred[mask], disp_gt[mask], reduction='mean')
+            pred_valid = model_pred[mask]
+            finite_mask = torch.isfinite(pred_valid)
+            if finite_mask.all():
+                loss += weight * F.smooth_l1_loss(pred_valid, disp_gt[mask], reduction='mean')
+            elif finite_mask.any():
+                loss += weight * F.smooth_l1_loss(pred_valid[finite_mask], disp_gt[mask][finite_mask], reduction='mean')
+
+        if not torch.isfinite(loss):
+            loss = torch.tensor(0.0, device=disp_gt.device, requires_grad=True)
 
         loss_info = {'scalar/train/loss_disp': loss.item()}
 

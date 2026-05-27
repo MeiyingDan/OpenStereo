@@ -25,6 +25,7 @@ from .foundationstereo import FoundationStereoDataset
 from .dynamic_replica import DynamicReplicaDataset
 from .mono_dataset import MonoDataset
 from .realfill_dataset import RealfillDataset
+from .scared_dataset import ScaredDataset
 
 __all__ = {
     'RealfillDataset': RealfillDataset,
@@ -46,7 +47,8 @@ __all__ = {
     'VirtualKitti2Dataset': VirtualKitti2Dataset,
     'FoundationStereoDataset': FoundationStereoDataset,
     'DynamicReplicaDataset': DynamicReplicaDataset,
-    'CarlaDataset': CarlaDataset
+    'CarlaDataset': CarlaDataset,
+    'ScaredDataset': ScaredDataset
 }
 
 

@@ -19,16 +19,16 @@ from .models.igevpp.trainer import Trainer as IGEVPPTrainer
 from .models.igev_rt.trainer import Trainer as IGEVRTTrainer
 
 try:
-# 'If you want to train/eval FoundationStereo, please refer to docs/prepare_foundationstereo.md
+    # 'If you want to train/eval FoundationStereo, please refer to docs/prepare_foundationstereo.md
     from .models.foundationstereo.trainer import Trainer as FoundationStereoTrainer
 except:
     raise ValueError('If you want to train/eval FoundationStereo, please refer to docs/prepare_foundationstereo.md. Otherwise you can comment out this line of code')
 
-try:
-    from timm.layers import DropPath
-    from .models.fast_foundationstereo.trainer import Trainer as FastFoundationStereoTrainer
-except:
-    raise ValueError("timm>=0.9 is required to use timm.layers in FastFoundationStereo. Otherwise you can comment out this line of code")
+# try:
+#     from timm.layers import DropPath
+#     from .models.fast_foundationstereo.trainer import Trainer as FastFoundationStereoTrainer
+# except:
+#     raise ValueError("timm>=0.9 is required to use timm.layers in FastFoundationStereo. Otherwise you can comment out this line of code")
 
 # If you want to train/eval NMRF-Stereo, you need to build deformable attention and superpixel-guided disparity downsample operator: 'cd stereo/modeling/models/nmrf/ops && sh make.sh && cd ..'
 # try:
@@ -52,7 +52,7 @@ __all__ = {
     'LightStereo': LightStereoTrainer,
     'StereoBaseGRU': StereoBaseGRUTrainer,
     'FoundationStereo': FoundationStereoTrainer,
-    'FastFoundationStereo': FastFoundationStereoTrainer,
+    # 'FastFoundationStereo': FastFoundationStereoTrainer,
     # 'IInet': IINetTrainer,
     # 'NMRF': NMRFTrainer
     "MonSter": MonsterTrainer,

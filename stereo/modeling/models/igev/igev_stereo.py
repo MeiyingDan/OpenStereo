@@ -228,6 +228,12 @@ class IGEVStereo(nn.Module):
         assert valid.shape == disp_gt.shape, [valid.shape, disp_gt.shape]
         assert not torch.isinf(disp_gt[valid.bool()]).any()
 
+        num_valid = valid.sum()
+        if num_valid == 0:
+            disp_loss = (model_pred['disp_preds'][-1] * 0.0).sum()
+            loss_info = {'scalar/train/loss_disp': disp_loss.item()}
+            return disp_loss, loss_info
+
         disp_init_pred = model_pred['init_disp']
         disp_loss = 1.0 * F.smooth_l1_loss(disp_init_pred[valid.bool()], disp_gt[valid.bool()], reduction='mean')
 
@@ -240,7 +246,6 @@ class IGEVStereo(nn.Module):
             adjusted_loss_gamma = loss_gamma ** (15 / (n_predictions - 1))
             i_weight = adjusted_loss_gamma ** (n_predictions - i - 1)
             i_loss = (disp_preds[i] - disp_gt).abs()
-            # i_loss = (disp_preds[i][valid.bool()] - disp_gt[valid.bool()]).abs()
             assert i_loss.shape == valid.shape, [i_loss.shape, valid.shape, disp_gt.shape, disp_preds[i].shape]
             disp_loss += i_weight * i_loss[valid.bool()].mean()
 

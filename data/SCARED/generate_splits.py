@@ -13,7 +13,7 @@ Each output line: left_path right_path disp_path (space-separated, relative to S
 import os
 import numpy as np
 
-SCARED_ROOT = "/home/meiying/Meiying_Masterarbeit/SCARED_DATASET_processed"
+SCARED_ROOT = "/home/meiying/Meiying_Masterarbeit/SCARED/SCARED_DATASET_processed"
 OUTPUT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 TRAIN_DATASET_IDS = [1, 2, 3, 6, 7]  # exclude 4, 5 (calibration issues)

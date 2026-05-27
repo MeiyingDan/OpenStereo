@@ -22,5 +22,5 @@ DATA_PATH_DICT = {
     'DynamicReplicaDataset': '/file_system/vepfs/public_data/stereo/dynamic_stereo',
     'MonoDataset': '/file_system/vepfs/public_data/depthAnythingData',
     'RealfillDataset': '/file_system/vepfs/public_data/depthAnythingData',
-    'ScaredDataset': '/home/meiying/Meiying_Masterarbeit/SCARED_DATASET_processed',
+    'ScaredDataset': '/home/meiying/Meiying_Masterarbeit/SCARED/SCARED_DATASET_processed',
 }

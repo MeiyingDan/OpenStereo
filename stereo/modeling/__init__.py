@@ -21,8 +21,8 @@ from .models.igev_rt.trainer import Trainer as IGEVRTTrainer
 try:
     # 'If you want to train/eval FoundationStereo, please refer to docs/prepare_foundationstereo.md
     from .models.foundationstereo.trainer import Trainer as FoundationStereoTrainer
-except:
-    raise ValueError('If you want to train/eval FoundationStereo, please refer to docs/prepare_foundationstereo.md. Otherwise you can comment out this line of code')
+except ImportError:
+    FoundationStereoTrainer = None
 
 # try:
 #     from timm.layers import DropPath
@@ -51,7 +51,6 @@ __all__ = {
     'CasPSMNet': CasStereoTrainer,
     'LightStereo': LightStereoTrainer,
     'StereoBaseGRU': StereoBaseGRUTrainer,
-    'FoundationStereo': FoundationStereoTrainer,
     # 'FastFoundationStereo': FastFoundationStereoTrainer,
     # 'IInet': IINetTrainer,
     # 'NMRF': NMRFTrainer
@@ -59,6 +58,8 @@ __all__ = {
     "IGEVPP": IGEVPPTrainer,
     "IGEVRT": IGEVRTTrainer
 }
+if FoundationStereoTrainer is not None:
+    __all__['FoundationStereo'] = FoundationStereoTrainer
 
 
 def build_trainer(args, cfgs, local_rank, global_rank, logger, tb_writer):

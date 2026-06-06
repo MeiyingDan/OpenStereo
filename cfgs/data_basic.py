@@ -23,4 +23,5 @@ DATA_PATH_DICT = {
     'MonoDataset': '/file_system/vepfs/public_data/depthAnythingData',
     'RealfillDataset': '/file_system/vepfs/public_data/depthAnythingData',
     'ScaredDataset': '/home/meiying/Meiying_Masterarbeit/SCARED/SCARED_DATASET_processed',
+    'D4DDataset': '/home/meiying/Meiying_Masterarbeit/D4D_dataset',
 }

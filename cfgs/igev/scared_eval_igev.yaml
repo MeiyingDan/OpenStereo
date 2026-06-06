@@ -2,8 +2,9 @@ DATA_CONFIG:
     DATA_INFOS:
         -   DATASET: ScaredDataset
             DATA_SPLIT: {
-                EVALUATING: ./data/SCARED/scared_val.txt,
-                TESTING: ./data/SCARED/scared_test.txt
+                # EVALUATING: ./data/SCARED/scared_val.txt,
+                # TESTING: ./data/SCARED/scared_test.txt
+                EVALUATING: ./data/SCARED/scared_test.txt
             }
             RETURN_RIGHT_DISP: false
             SCALE_FACTOR: 128.0

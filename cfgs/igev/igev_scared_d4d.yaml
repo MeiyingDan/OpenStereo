@@ -9,11 +9,21 @@ DATA_CONFIG:
             RETURN_RIGHT_DISP: false
             SCALE_FACTOR: 128.0
 
+        -   DATASET: D4DDataset
+            DATA_SPLIT: {
+                TRAINING: ./data/D4D/d4d_train.txt,
+                EVALUATING: ./data/D4D/d4d_val.txt,
+                TESTING: ./data/D4D/d4d_test.txt
+            }
+            MAX_DISP: 256
+            MIN_DEPTH: 0.01
+            MAX_DEPTH: 0.5
+
     DATA_TRANSFORM:
         TRAINING:
             - { NAME: StereoColorJitter, BRIGHTNESS: [ 0.7, 1.3 ], CONTRAST: [ 0.7, 1.3 ], SATURATION: [ 0.7, 1.3 ], HUE: 0.3, ASYMMETRIC_PROB: 0 }
             - { NAME: RandomErase, PROB: 0.5, MAX_TIME: 2, BOUNDS: [ 50, 100 ] }
-            - { NAME: RandomCrop, SIZE: [ 320, 736 ], Y_JITTER: false }
+            - { NAME: RandomCrop, SIZE: [ 320, 640 ], Y_JITTER: false }
             - { NAME: TransposeImage }
             - { NAME: ToTensor }
         EVALUATING:
@@ -33,8 +43,8 @@ MODEL:
     TRAIN_ITERS: 22
     VALID_ITERS: 32
     FIND_UNUSED_PARAMETERS: true
-    CKPT: 48
-    PRETRAINED_MODEL: ''
+    CKPT: -1
+    PRETRAINED_MODEL: 'output/ScaredDataset/IGEV/igev_scared/default/ckpt/checkpoint_epoch_39.pth'
 
 OPTIMIZATION:
     BATCH_SIZE_PER_GPU: 2
@@ -72,7 +82,7 @@ EVALUATOR:
 TRAINER:
     EVAL_INTERVAL: 1
     CKPT_SAVE_INTERVAL: 1
-    MAX_CKPT_SAVE_NUM: 30
+    MAX_CKPT_SAVE_NUM: 50
     LOGGER_ITER_INTERVAL: 10
     TRAIN_VISUALIZATION: True
     EVAL_VISUALIZATION: True

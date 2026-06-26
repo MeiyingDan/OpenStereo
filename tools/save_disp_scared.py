@@ -172,7 +172,7 @@ def main():
                 continue
 
             if dataset_part and keyframe_part:
-                sub_dir = os.path.join(args.output_dir, dataset_part, keyframe_part, 'data', 'disparity')
+                sub_dir = os.path.join(args.output_dir, dataset_part, keyframe_part, 'disparity')
             else:
                 sub_dir = args.output_dir
             os.makedirs(sub_dir, exist_ok=True)
